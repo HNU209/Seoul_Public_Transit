@@ -1,18 +1,18 @@
 {
   "files": {
     "main.css": "/Seoul_Public_Transit/static/css/main.18e11287.css",
-    "main.js": "/Seoul_Public_Transit/static/js/main.e163bb2c.js",
+    "main.js": "/Seoul_Public_Transit/static/js/main.b0e81df8.js",
     "static/js/483.d91c08eb.chunk.js": "/Seoul_Public_Transit/static/js/483.d91c08eb.chunk.js",
     "static/js/787.96f70404.chunk.js": "/Seoul_Public_Transit/static/js/787.96f70404.chunk.js",
     "service-worker.js": "/Seoul_Public_Transit/service-worker.js",
     "index.html": "/Seoul_Public_Transit/index.html",
     "main.18e11287.css.map": "/Seoul_Public_Transit/static/css/main.18e11287.css.map",
-    "main.e163bb2c.js.map": "/Seoul_Public_Transit/static/js/main.e163bb2c.js.map",
+    "main.b0e81df8.js.map": "/Seoul_Public_Transit/static/js/main.b0e81df8.js.map",
     "483.d91c08eb.chunk.js.map": "/Seoul_Public_Transit/static/js/483.d91c08eb.chunk.js.map",
     "787.96f70404.chunk.js.map": "/Seoul_Public_Transit/static/js/787.96f70404.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.18e11287.css",
-    "static/js/main.e163bb2c.js"
+    "static/js/main.b0e81df8.js"
   ]
 }
