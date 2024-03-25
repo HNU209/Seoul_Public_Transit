@@ -1,5 +1,5 @@
-/* global window */
-import React, { useState, useEffect, useCallback } from "react";
+
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 
 import DeckGL from '@deck.gl/react';
 import {Map} from 'react-map-gl';
@@ -7,7 +7,6 @@ import {Map} from 'react-map-gl';
 import {AmbientLight, PointLight, LightingEffect} from '@deck.gl/core';
 import {TripsLayer} from '@deck.gl/geo-layers';
 import {ScatterplotLayer, PathLayer} from "@deck.gl/layers";
-
 
 import Slider from "@mui/material/Slider";
 // import legend from "../image/legend.png";
@@ -54,18 +53,20 @@ const DEFAULT_THEME = {
 const INITIAL_VIEW_STATE = { 
   longitude: 126.98, // 126.98 , -74
   latitude: 37.57, // 37.57 , 40.72
-  zoom: 10,
-  pitch: 45,
+  zoom: 11,
+  pitch: 20,
+  minZoom: 5,
+  maxZoom: 16,
   bearing: 0
 };
 
-const ICON_MAPPING = {
-    marker: { x: 0, y: 0, width: 128, height: 128, mask: true },
-};
+// const ICON_MAPPING = {
+//     marker: { x: 0, y: 0, width: 128, height: 128, mask: true },
+// };
 
 const minTime = 540;
 const maxTime = 800;
-const animationSpeed = 2;
+const animationSpeed = 4;
 const mapStyle = "mapbox://styles/spear5306/ckzcz5m8w002814o2coz02sjc";
 const MAPBOX_TOKEN = `pk.eyJ1Ijoic2hlcnJ5MTAyNCIsImEiOiJjbG00dmtic3YwbGNoM2Zxb3V5NmhxZDZ6In0.ZBrAsHLwNihh7xqTify5hQ`;
 
@@ -102,17 +103,24 @@ const returnAnimationTime = (time) => {
   };
 
 
-const Trip = (props) => {
+const Trip = React.memo((props) => {
   const [time, setTime] = useState(minTime);
   const [animation] = useState({});
 
-  // const trip = props.trip;
-  const trip = currData(props.trip, time);
+
+  // const trip = currData(props.trip, time);
   const icon = props.icon;
   const line = props.line;
 
+  const [filteredTrip, setFilteredTrip] = useState([]);
+
+  useEffect(() => {
+    const filteredTrip = currData(props.trip, time);
+    setFilteredTrip(filteredTrip);
+  }, [props.trip, time]);
+
   const animate = useCallback(() => {
-    setTime((time) => returnAnimationTime(time));
+    setTime(returnAnimationTime);
     animation.id = window.requestAnimationFrame(animate);
   }, [animation]);
 
@@ -121,9 +129,9 @@ const Trip = (props) => {
     return () => window.cancelAnimationFrame(animation.id);
   }, [animation, animate]);
 
-  const layers = [
+  const layers = useMemo(() => [
     new PathLayer({  
-      id: 'trips',
+      id: 'lines',
       data: line,
       getPath: d => d.line,
       getColor: d => d.color,
@@ -147,7 +155,7 @@ const Trip = (props) => {
     }),
     new TripsLayer({  
       id: 'trips',
-      data: trip,
+      data: filteredTrip,
       getPath: d => d.route,
       getTimestamps: d => d.timestamp,
       getColor: d => d.color,
@@ -159,7 +167,7 @@ const Trip = (props) => {
       currentTime: time,
       shadowEnabled: false
     }),
-  ];
+  ], [filteredTrip, icon, time, line]);
   
   const SliderChange = (value) => {
     const time = value.target.value;
@@ -190,6 +198,6 @@ const Trip = (props) => {
       {/* <img className="legend" src={legend} alt="legend" ></img> */}
     </div>
   );
-};
+});
 
 export default Trip;
